@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.optaplanner.core.api.domain.solution.*;
@@ -12,7 +13,7 @@ public class Itinerary {
     private long Id;
     @PlanningVariable(valueRangeProviderRefs = "stationRange", nullable = true)
     private List<Connection> journey;
-    private int totalTravelTime =-1;
+    private int totalTravelTime = -1;
 
     private HardSoftScore score;
 
@@ -22,6 +23,11 @@ public class Itinerary {
 
     protected int getDestination() {
         return 3;
+    }
+
+    public Itinerary() {
+        journey = new ArrayList<Connection>();
+
     }
 
     public boolean check() {
@@ -38,20 +44,21 @@ public class Itinerary {
             currentTime = leg.from + leg.duration;
             currentPlace = leg.dest;
         }
-        totalTravelTime =currentTime;
+        totalTravelTime = currentTime;
         return currentPlace == getDestination();
     }
 
     public void print() {
+        System.out.println("Route::");
         for (Connection leg : journey
         ) {
 
-            System.out.println("@"+leg.from+" take from "+leg.from+" to "+leg.dest);
+            System.out.println("@" + leg.from + " take from " + leg.from + " to " + leg.dest);
         }
     }
 
     public int getTotalTravelTime() {
-        if (totalTravelTime==-1) {
+        if (totalTravelTime == -1) {
             check();
         }
         return totalTravelTime;

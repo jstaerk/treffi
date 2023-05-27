@@ -6,7 +6,7 @@ import org.optaplanner.core.config.solver.termination.TerminationConfig;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello worldy");
+        System.out.println("The best route is:");
 
         ScoreDirectorFactoryConfig sdc = new ScoreDirectorFactoryConfig();
 
@@ -28,7 +28,7 @@ public class Main {
         // Solve the problem
 
         solver.solve(possibleJourneys);
-        Itinerary bestJourney = (Itinerary) solver.getBestSolution();
+        Itinerary bestJourney = solver.getBestSolution();
         bestJourney.print();
 
     }
