@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Connection {
 
-    int start;
-    int dest;
+    int startPlaceId;
+    int destinationPlaceId;
     int from;
     int duration;
 
@@ -17,20 +17,27 @@ public class Connection {
      * this @planningvariable along with its valueRangeProvider would not be needed by non-optimizable code
      */
     @PlanningVariable(valueRangeProviderRefs = "timetableRange", nullable = true)
-    Connection possibleContinuations;
+    Itinerary usedIn;
 
 
     @ValueRangeProvider(id = "timetableRange")
     public List<Connection> getJourney() {
         Timetable t = new Timetable();
-        return t.getFutureConnectionsFrom(from,start);
+        return t.getFutureConnectionsFrom(from, startPlaceId);
     }
 
+    public String toString() {
+        return "@" + this.from + " take from " + this.from + " to " + this.destinationPlaceId;
+    }
 
-    public Connection(int start, int dest, int from, int duration) {
-        this.start = start;
-        this.dest = dest;
+    public Connection(int startPlaceId, int destinationPlaceId, int from, int duration) {
+        this.startPlaceId = startPlaceId;
+        this.destinationPlaceId = destinationPlaceId;
         this.from = from;
         this.duration = duration;
+    }
+
+    public void setUse(Itinerary itinerary) {
+        this.usedIn=itinerary;
     }
 }

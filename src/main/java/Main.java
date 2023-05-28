@@ -13,7 +13,7 @@ public class Main {
         sdc.setEasyScoreCalculatorClass(Optimizer.class);
 
         TerminationConfig tc = new TerminationConfig();
-        tc.setUnimprovedMillisecondsSpentLimit(10000l);
+        tc.setUnimprovedMillisecondsSpentLimit(1000l);
 
         SolverFactory<Itinerary> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(Itinerary.class)
@@ -24,7 +24,7 @@ public class Main {
 
 
         Itinerary possibleJourneys = new Itinerary();
-
+        possibleJourneys.createResourcesToOptimize();
         // Solve the problem
 
         solver.solve(possibleJourneys);

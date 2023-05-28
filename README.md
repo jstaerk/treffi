@@ -11,4 +11,12 @@ when building in intellij run with --info then --stacktrace and then look at to
 2) write optimizer
 3) write solution @planningsolution with a @planningscore, a @planningvariable and PlanningEntityCollectionProperty 
 4) add planninngvariables with valuerangeproviders
- which conn is used where 
+ which conn is used where
+   https://www.optaplanner.org/docs/optaplanner/latest/use-cases-and-examples/cloud-balancing/cloud-balancing.html
+
+         pklanningsolution: die klasse, die optimierungspotential
+         valuerangeprovider hat und deren PlanningEntityCollectionProperty die aktuell zu rechnende lösung bezeichnet
+         und die mit EasyScoreCalculator implementiernde klasse berechnet wird#
+5) planningsolution muss score cachen können 
+6) planningsolution muss auch zustand der valuerangrprovider im zustand haben
+7) planningentity muss (planningvariable haben) und auf PlanningEntityCollectionProperty zuornenbar sein

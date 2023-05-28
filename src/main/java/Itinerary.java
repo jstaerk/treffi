@@ -11,7 +11,6 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 public class Itinerary {
 
     private long Id;
-    @PlanningVariable(valueRangeProviderRefs = "stationRange", nullable = true)
     private List<Connection> journey;
     private int totalTravelTime = -1;
 
@@ -26,34 +25,40 @@ public class Itinerary {
     }
 
     public Itinerary() {
-        journey = new ArrayList<Connection>();
+
 
     }
 
     public boolean check() {
         int currentPlace = getStart();
         int currentTime = 0;
+        int i=0;
         for (Connection leg : journey
         ) {
-            if (leg.start != currentPlace) {
+            i++;
+            leg.setUse(this);
+            System.out.println("Deb chk "+i+".."+leg);
+
+            if (leg.startPlaceId != currentPlace) {
                 return false;
             }
             if (leg.from < currentTime) {
                 return false;
             }
             currentTime = leg.from + leg.duration;
-            currentPlace = leg.dest;
+            currentPlace = leg.destinationPlaceId;
         }
+
         totalTravelTime = currentTime;
         return currentPlace == getDestination();
     }
 
     public void print() {
-        System.out.println("Route::");
+        System.out.println("Score:"+getScore().getHardScore()+"H "+getScore().getSoftScore()+" \nRoute::");
         for (Connection leg : journey
         ) {
 
-            System.out.println("@" + leg.from + " take from " + leg.from + " to " + leg.dest);
+            System.out.println("R:"+leg);
         }
     }
 
@@ -63,6 +68,7 @@ public class Itinerary {
         }
         return totalTravelTime;
     }
+
 
     @ValueRangeProvider(id = "stationRange")
     public List<Connection> getJourney() {
@@ -92,4 +98,8 @@ public class Itinerary {
         Id = id;
     }
 
+    public void createResourcesToOptimize() {
+        journey = new ArrayList<Connection>();
+
+    }
 }

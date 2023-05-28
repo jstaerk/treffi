@@ -15,10 +15,10 @@ public class Timetable {
         return allConnections;
     }
 
-    public List<Connection> getFutureConnectionsFrom(int from, int start) {
+    public List<Connection> getFutureConnectionsFrom(int from, int startPlaceId) {
         List<Connection> eligible = new ArrayList<Connection>();
         for (Connection theConnection : allConnections) {
-            if ((theConnection.from >= from) && (theConnection.start == start)) {
+            if ((theConnection.from >= from) && (theConnection.startPlaceId == startPlaceId)) {
                 eligible.add(theConnection);
             }
         }
