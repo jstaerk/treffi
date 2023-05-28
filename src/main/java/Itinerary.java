@@ -11,9 +11,8 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 public class Itinerary {
 
     private long Id;
-    private List<Connection> journey;
     private int totalTravelTime = -1;
-
+    private List<UsedConnection> journey;
     private HardSoftScore score;
 
     protected int getStart() {
@@ -33,12 +32,13 @@ public class Itinerary {
         int currentPlace = getStart();
         int currentTime = 0;
         int i=0;
-        for (Connection leg : journey
+        System.out.println("Deb checking possible journey");
+        for (UsedConnection legU : journey
         ) {
             i++;
-            leg.setUse(this);
-            System.out.println("Deb chk "+i+".."+leg);
+            System.out.println("Deb chk "+i+".."+journey);
 
+            Connection leg=legU.getConnection();
             if (leg.startPlaceId != currentPlace) {
                 return false;
             }
@@ -55,11 +55,11 @@ public class Itinerary {
 
     public void print() {
         System.out.println("Score:"+getScore().getHardScore()+"H "+getScore().getSoftScore()+" \nRoute::");
-        for (Connection leg : journey
-        ) {
+       // for (Connection leg : journey
+        //) {
 
-            System.out.println("R:"+leg);
-        }
+            System.out.println("R:"+journey);
+        //}
     }
 
     public int getTotalTravelTime() {
@@ -70,15 +70,10 @@ public class Itinerary {
     }
 
 
-    @ValueRangeProvider(id = "stationRange")
-    public List<Connection> getJourney() {
-        return journey;
-    }
-
     @PlanningEntityCollectionProperty
-    public List<Connection> getTimeTable() {
-        Timetable t = new Timetable();
-        return t.getConnections();
+    @ValueRangeProvider(id = "stationRange")
+    public List<UsedConnection> getJourney() {
+        return journey;
     }
 
     @PlanningScore
@@ -99,7 +94,14 @@ public class Itinerary {
     }
 
     public void createResourcesToOptimize() {
-        journey = new ArrayList<Connection>();
+     journey=new ArrayList<UsedConnection>();
+     Timetable t=new Timetable();
+        for (Connection c :t.getConnections()
+             ) {
+            UsedConnection u=new UsedConnection(c);
+            u.setItinerary(this);
+            journey.add(u);
 
+        }
     }
 }

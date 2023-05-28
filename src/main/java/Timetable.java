@@ -8,6 +8,8 @@ public class Timetable {
             add(new Connection(2, 3, 15, 20));
             add(new Connection(2, 3, 9, 10));
             add(new Connection(6, 7, 3, 5));
+            add(new Connection(1, 3, 3, 15));
+            add(new Connection(1, 3, 5, 5));
         }
     };
 

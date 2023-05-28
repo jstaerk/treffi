@@ -17,7 +17,7 @@ public class Main {
 
         SolverFactory<Itinerary> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(Itinerary.class)
-                .withEntityClasses(Connection.class)
+                .withEntityClasses(UsedConnection.class)
                 .withScoreDirectorFactory(sdc)
                 .withTerminationConfig(tc));
         Solver<Itinerary> solver = solverFactory.buildSolver();

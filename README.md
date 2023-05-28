@@ -20,3 +20,4 @@ when building in intellij run with --info then --stacktrace and then look at to
 5) planningsolution muss score cachen können 
 6) planningsolution muss auch zustand der valuerangrprovider im zustand haben
 7) planningentity muss (planningvariable haben) und auf PlanningEntityCollectionProperty zuornenbar sein
+8) planningentity beschreibt die zuordnung was wo verwendet wird , eine art n:m tabelle
