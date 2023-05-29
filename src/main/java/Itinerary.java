@@ -42,6 +42,9 @@ public class Itinerary {
             if (leg.startPlaceId != currentPlace) {
                 return false;
             }
+            if (getDestination() == currentPlace) {
+                return true;
+            }
             if (leg.from < currentTime) {
                 return false;
             }

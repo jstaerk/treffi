@@ -14,7 +14,7 @@ public class Connection {
 
     @Override
     public String toString() {
-        return "@" + this.from + " take from " + this.from + " to " + this.destinationPlaceId;
+        return "@" + this.from + " take from " + this.startPlaceId + " to " + this.destinationPlaceId;
     }
 
     public Connection(int startPlaceId, int destinationPlaceId, int from, int duration) {

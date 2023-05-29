@@ -17,6 +17,14 @@ public class UsedConnection {
     @PlanningVariable(valueRangeProviderRefs = "timetableRange", nullable = true)
     Itinerary usedIn;
 
+    public Itinerary getUsedIn() {
+        return usedIn;
+    }
+
+    public void setUsedIn(Itinerary usedIn) {
+        this.usedIn = usedIn;
+    }
+
     UsedConnection(Connection c) {
         possibleItineraries=new ArrayList<>();
         whichConnection=c;

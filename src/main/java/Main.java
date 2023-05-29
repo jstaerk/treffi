@@ -13,7 +13,7 @@ public class Main {
         sdc.setEasyScoreCalculatorClass(Optimizer.class);
 
         TerminationConfig tc = new TerminationConfig();
-        tc.setUnimprovedMillisecondsSpentLimit(1000l);
+        tc.setUnimprovedMillisecondsSpentLimit(10000l);
 
         SolverFactory<Itinerary> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(Itinerary.class)
