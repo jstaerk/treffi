@@ -12,7 +12,7 @@ public class Itinerary {
 
     private long Id;
     private int totalTravelTime = -1;
-    private List<UsedConnection> journey;
+    private Connection journey;
     private HardSoftScore score;
 
     protected int getStart() {
@@ -33,12 +33,13 @@ public class Itinerary {
         int currentTime = 0;
         int i=0;
         System.out.println("Deb checking possible journey");
-        for (UsedConnection legU : journey
-        ) {
+       // for (UsedConnection legU : journey
+        //) {
+        //Connection legU=journey;
             i++;
             System.out.println("Deb chk "+i+".."+journey);
 
-            Connection leg=legU.getConnection();
+            Connection leg=journey;
             if (leg.startPlaceId != currentPlace) {
                 return false;
             }
@@ -50,7 +51,7 @@ public class Itinerary {
             }
             currentTime = leg.from + leg.duration;
             currentPlace = leg.destinationPlaceId;
-        }
+       // }
 
         totalTravelTime = currentTime;
         return currentPlace == getDestination();
@@ -73,9 +74,9 @@ public class Itinerary {
     }
 
 
-    @PlanningEntityCollectionProperty
+    @PlanningEntityProperty
     @ValueRangeProvider(id = "stationRange")
-    public List<UsedConnection> getJourney() {
+    public Connection getJourney() {
         return journey;
     }
 
@@ -97,14 +98,9 @@ public class Itinerary {
     }
 
     public void createResourcesToOptimize() {
-     journey=new ArrayList<UsedConnection>();
+     //journey=new ArrayList<UsedConnection>();
+      //  journey=new Connection();
      Timetable t=new Timetable();
-        for (Connection c :t.getConnections()
-             ) {
-            UsedConnection u=new UsedConnection(c);
-            u.setItinerary(this);
-            journey.add(u);
-
-        }
-    }
+     journey=new Connection();
+     }
 }

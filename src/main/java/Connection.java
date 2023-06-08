@@ -17,6 +17,9 @@ public class Connection {
         return "@" + this.from + " take from " + this.startPlaceId + " to " + this.destinationPlaceId;
     }
 
+    public Connection() {
+
+    }
     public Connection(int startPlaceId, int destinationPlaceId, int from, int duration) {
         this.startPlaceId = startPlaceId;
         this.destinationPlaceId = destinationPlaceId;
