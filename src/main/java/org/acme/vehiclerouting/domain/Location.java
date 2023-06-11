@@ -5,14 +5,24 @@ import java.util.Map;
 public class Location {
 
     private final long id;
-    private final double latitude;
-    private final double longitude;
+    private double latitude;
+    private double longitude;
     private Map<Location, Long> distanceMap;
 
     public Location(long id, double latitude, double longitude) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Location setLatitude(double lat) {
+        this.latitude=lat;
+        return this;
+    }
+
+    public Location setLongitude(double lng) {
+        this.longitude=lng;
+        return this;
     }
 
     public long getId() {

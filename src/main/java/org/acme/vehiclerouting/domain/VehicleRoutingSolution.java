@@ -1,9 +1,15 @@
 package org.acme.vehiclerouting.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.acme.vehiclerouting.bootstrap.DemoDataBuilder;
+import org.acme.vehiclerouting.domain.geo.DistanceCalculator;
+import org.acme.vehiclerouting.domain.geo.EuclideanDistanceCalculator;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
@@ -59,6 +65,52 @@ public class VehicleRoutingSolution {
         problem.setScore(HardSoftLongScore.ZERO);
 
         return problem;
+    }
+
+    public static VehicleRoutingSolution predef() {
+
+        List<Location> locationList = new ArrayList<Location>(List.of(new Location(3, 2, 3),
+                new Location(4, 3, 4),new Location(1, 1.0d, 2.0d ),new Location(2, 2.0, 3.0 ),
+                new Location(4, 3, 4)
+        ));
+
+        List<Depot> depotList =  new ArrayList<Depot>(List.of(new Depot(1,locationList.get(0)),
+                new Depot(2,locationList.get(1))));
+
+        int cap=10;
+        List<Vehicle> vehicleList =  new ArrayList<Vehicle>(List.of(new Vehicle(1,cap,depotList.get(0)),
+                new Vehicle(2,cap,depotList.get(1))));
+
+        int dem=1;
+        List<Customer> customerList = new ArrayList<Customer>(List.of(new Customer(1,locationList.get(2),dem),
+                new Customer(2,locationList.get(3),dem)));
+        DistanceCalculator distanceCalculator = new EuclideanDistanceCalculator();
+
+
+        distanceCalculator.initDistanceMaps(locationList);
+
+        Location southWestCorner=new Location(98,999.0,999.0);
+        Location  northEastCorner=new Location(99,0.0,0.0);
+        for (Location currentLocation:locationList) {
+            if (currentLocation.getLatitude()>northEastCorner.getLatitude()) {
+                northEastCorner.setLatitude(currentLocation.getLatitude());
+            }
+            if (currentLocation.getLatitude()>northEastCorner.getLongitude()) {
+                northEastCorner.setLongitude(currentLocation.getLongitude());
+            }
+
+            if (currentLocation.getLatitude()<southWestCorner.getLatitude()) {
+                southWestCorner.setLatitude(currentLocation.getLatitude());
+            }
+            if (currentLocation.getLatitude()<southWestCorner.getLongitude()) {
+                southWestCorner.setLongitude(currentLocation.getLongitude());
+            }
+
+        }
+
+        return new VehicleRoutingSolution("Predef", locationList,
+                depotList, vehicleList, customerList, southWestCorner, northEastCorner);
+
     }
 
     public String getName() {
