@@ -77,7 +77,7 @@ public class Vehicle {
         for (Customer customer : customerList) {
             route.add(customer.getLocation());
         }
-        route.add(depot.getLocation());
+//        route.add(depot.getLocation());
 
         return route;
     }
@@ -103,7 +103,6 @@ public class Vehicle {
             previousLocation = customer.getLocation();
         }
         totalDistance += previousLocation.getDistanceTo(depot.getLocation());
-
         return totalDistance;
     }
 
