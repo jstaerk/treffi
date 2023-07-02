@@ -5,7 +5,7 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import java.util.List;
 
 @PlanningEntity
-public class UsedConnection {
+public class Traveler {
 
     int fromPlaceId;
     int time;

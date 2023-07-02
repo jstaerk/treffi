@@ -77,11 +77,11 @@ public class VehicleRoutingSolution {
         List<Depot> depotList =  new ArrayList<Depot>(List.of(new Depot(1,locationList.get(0)),
                 new Depot(2,locationList.get(1))));
 
-        int cap=10;
+        int cap=1;
         List<Vehicle> vehicleList =  new ArrayList<Vehicle>(List.of(new Vehicle(1,cap,depotList.get(0)),
                 new Vehicle(2,cap,depotList.get(1))));
 
-        int dem=1;
+        int dem=2;
         List<Customer> customerList = new ArrayList<Customer>(List.of(new Customer(1,locationList.get(2),dem),
                 new Customer(2,locationList.get(3),dem)));
         DistanceCalculator distanceCalculator = new EuclideanDistanceCalculator();

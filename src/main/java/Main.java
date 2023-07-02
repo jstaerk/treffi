@@ -1,23 +1,16 @@
-import org.acme.vehiclerouting.bootstrap.DemoDataBuilder;
 import org.acme.vehiclerouting.domain.Location;
 import org.acme.vehiclerouting.domain.Vehicle;
 import org.acme.vehiclerouting.domain.VehicleRoutingSolution;
 import org.acme.vehiclerouting.persistence.VehicleRoutingSolutionRepository;
 import org.acme.vehiclerouting.solver.VehicleRoutingConstraintProvider;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import org.optaplanner.core.api.solver.*;
-import org.optaplanner.core.api.solver.change.ProblemChange;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
-import org.optaplanner.core.impl.solver.DefaultSolverManager;
 
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -64,11 +57,11 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("The best route is:");
-        Main unstatic = new Main();
-        unstatic.go();
+//        Main unstatic = new Main();
+//        unstatic.go();
 
 
-/*
+
         ScoreDirectorFactoryConfig sdc = new ScoreDirectorFactoryConfig();
 
         sdc.setEasyScoreCalculatorClass(Optimizer.class);
@@ -78,7 +71,7 @@ public class Main {
 
         SolverFactory<Itinerary> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(Itinerary.class)
-                .withEntityClasses(UsedConnection.class)
+                .withEntityClasses(Traveler.class)
                 .withScoreDirectorFactory(sdc)
                 .withTerminationConfig(tc));
         Solver<Itinerary> solver = solverFactory.buildSolver();
@@ -88,9 +81,10 @@ public class Main {
         possibleJourneys.createResourcesToOptimize();
         // Solve the problem
 
-        solver.solve(possibleJourneys);
-        Itinerary bestJourney = solver.getBestSolution();
+        Itinerary bestJourney= solver.solve(possibleJourneys);
+        HardSoftScore sc=bestJourney.getScore();
+
         bestJourney.print();
-*/
+
     }
 }

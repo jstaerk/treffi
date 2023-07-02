@@ -1,10 +1,10 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.optaplanner.core.api.domain.solution.*;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
-import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @PlanningSolution
@@ -12,7 +12,9 @@ public class Itinerary {
 
     private long Id;
     private int totalTravelTime = -1;
-    private Connection journey;
+    @PlanningEntityCollectionProperty
+    private ArrayList <Connection> journey;
+    Timetable t;
     private HardSoftScore score;
 
     protected int getStart() {
@@ -25,6 +27,9 @@ public class Itinerary {
 
     public Itinerary() {
 
+        t=new Timetable();
+
+        journey=new ArrayList<Connection>();
 
     }
 
@@ -33,25 +38,25 @@ public class Itinerary {
         int currentTime = 0;
         int i=0;
         System.out.println("Deb checking possible journey");
-       // for (UsedConnection legU : journey
-        //) {
+        for (Connection legU : journey
+        ) {
         //Connection legU=journey;
             i++;
             System.out.println("Deb chk "+i+".."+journey);
 
-            Connection leg=journey;
-            if (leg.startPlaceId != currentPlace) {
+
+            if (legU.startPlaceId != currentPlace) {
                 return false;
             }
             if (getDestination() == currentPlace) {
                 return true;
             }
-            if (leg.from < currentTime) {
+            if (legU.from < currentTime) {
                 return false;
             }
-            currentTime = leg.from + leg.duration;
-            currentPlace = leg.destinationPlaceId;
-       // }
+            currentTime = legU.from + legU.duration;
+            currentPlace = legU.destinationPlaceId;
+        }
 
         totalTravelTime = currentTime;
         return currentPlace == getDestination();
@@ -74,10 +79,19 @@ public class Itinerary {
     }
 
 
-    @PlanningEntityProperty
     @ValueRangeProvider(id = "stationRange")
-    public Connection getJourney() {
-        return journey;
+    public List<Connection> getNextPossibleCollection() {
+        int start=getStart();
+        int time=0;
+        if (journey.size()>0) {
+
+
+            Connection lastConn=journey.get(journey.size());
+            start=lastConn.destinationPlaceId;
+            time=journey.get(journey.size()).from+journey.get(journey.size()).duration;
+        }
+
+        return t.getFutureConnectionsFrom(start, time);
     }
 
     @PlanningScore
@@ -100,7 +114,20 @@ public class Itinerary {
     public void createResourcesToOptimize() {
      //journey=new ArrayList<UsedConnection>();
       //  journey=new Connection();
-     Timetable t=new Timetable();
-     journey=new Connection();
-     }
+        int start=getStart();
+        int time=0;
+        if (journey.size()>0) {
+
+
+            Connection lastConn=journey.get(journey.size());
+            start=lastConn.destinationPlaceId;
+            time=journey.get(journey.size()).from+journey.get(journey.size()).duration;
+        }
+
+        List<Connection> possible=t.getFutureConnectionsFrom(start, time);
+        Random rand = new Random();
+        Connection randomElement = (Connection) possible.get(rand.nextInt(possible.size()));
+        journey.add(randomElement);
+
+    }
 }
