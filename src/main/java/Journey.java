@@ -10,64 +10,62 @@ public class Journey {
     int destinationPlaceId;
     private ArrayList<Connection> journey;
     Timetable t;
-    int totalTravelTime=-1;
+    int totalTravelTime = -1;
 
 
     public Journey(int startPlaceId, int destinationPlaceId) {
         this.startPlaceId = startPlaceId;
         this.destinationPlaceId = destinationPlaceId;
-        journey=new ArrayList<Connection>();
-        t=new Timetable();
+        journey = new ArrayList<Connection>();
+        t = new Timetable();
     }
 
 
     public String getJourneyDescription() {
-        String res="";
-        for (Connection currentConnection: journey
+        String res = "";
+        for (Connection currentConnection : journey
         ) {
 
-            res+=currentConnection.toString()+"\n";
+            res += currentConnection.toString() + "\n";
         }
         return res;
     }
 
-    public  Journey getRandomJourney() {
-        Journey res=new Journey(startPlaceId, destinationPlaceId);
-        int pos=startPlaceId;
-        int from=0;
-        int maxSize=10000;
-        int i=0;
-        int destination=3;
-        boolean deadlock=false;
-        while ((pos!=destination)&&(i<maxSize)&&(!deadlock)) {
+    public Journey getRandomJourney() {
+        Journey res = new Journey(startPlaceId, destinationPlaceId);
+        int pos = startPlaceId;
+        int from = 0;
+        int maxSize = 10000;
+        int i = 0;
+        int destination = 3;
+        while ((pos != destination) && (i < maxSize)) {
             i++;
-                    List<Connection> possibleConn=
-            t.getFutureConnectionsFrom(from, pos);
-                    if (possibleConn.size()==0) {
-                        deadlock=true;
+            List<Connection> possibleConn =
+                    t.getFutureConnectionsFrom(from, pos);
+            if (possibleConn.size() == 0) {
+                return null;//deadlocked, no trains from here, cant return this
+            } else {
+                Random rand = new Random();
+                Connection randomElement = possibleConn.get(rand.nextInt(possibleConn.size()));
 
-                    } else {
-                        Random rand = new Random();
-                        Connection randomElement = possibleConn.get(rand.nextInt(possibleConn.size()));
-
-                        res.journey.add(randomElement);
-                        pos = randomElement.destinationPlaceId;
-                        from = from + randomElement.duration;
-                    }
+                res.journey.add(randomElement);
+                pos = randomElement.destinationPlaceId;
+                from = from + randomElement.duration;
+            }
         }
         return res;
     }
 
     @ValueRangeProvider(id = "stationRange")
     public List<Connection> getNextPossibleCollection() {
-        int start=startPlaceId;
-        int time=0;
-        if (journey.size()>0) {
+        int start = startPlaceId;
+        int time = 0;
+        if (journey.size() > 0) {
 
 
-            Connection lastConn=journey.get(journey.size());
-            start=lastConn.destinationPlaceId;
-            time=journey.get(journey.size()).from+journey.get(journey.size()).duration;
+            Connection lastConn = journey.get(journey.size());
+            start = lastConn.destinationPlaceId;
+            time = journey.get(journey.size()).from + journey.get(journey.size()).duration;
         }
 
         return t.getFutureConnectionsFrom(start, time);
@@ -76,13 +74,13 @@ public class Journey {
     public boolean check() {
         int currentPlace = startPlaceId;
         int currentTime = 0;
-        int i=0;
+        int i = 0;
         System.out.println("Deb checking possible journey");
         for (Connection legU : journey
         ) {
             //Connection legU=journey;
             i++;
-            System.out.println("Deb chk "+i+".."+journey);
+            System.out.println("Deb chk " + i + ".." + journey);
 
 
             if (legU.startPlaceId != currentPlace) {
@@ -102,13 +100,17 @@ public class Journey {
         return currentPlace == getDestination();
     }
 
+    public int getTotalTravelTime() {
+        return totalTravelTime;
+    }
+
     protected int getDestination() {
         return 3;
     }
 
 
-    @ValueRangeProvider(id="nextPoss")
-    public List<Connection> possibleNext(){
+    @ValueRangeProvider(id = "nextPoss")
+    public List<Connection> possibleNext() {
         return t.getConnections();
     }
 

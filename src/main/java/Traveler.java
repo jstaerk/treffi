@@ -52,6 +52,7 @@ public class Traveler {
         for (Journey j : journey
         ) {
             if (j.check()) {
+                totalTravelTime=j.getTotalTravelTime();
                 return true;
             }
         }
@@ -75,9 +76,13 @@ public class Traveler {
         int start = fromPlaceId;
         int time = 0;
 
+        Journey j = new Journey(fromPlaceId, getDestination());
         for (int i = 0; i < 10000; i++) {
-            Journey j = new Journey(fromPlaceId, getDestination());
-            journey.add(j.getRandomJourney());
+            Journey jr=j.getRandomJourney();
+
+            if (jr!=null) {
+                journey.add(jr);
+            }
         }
 
     }
