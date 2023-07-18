@@ -1,5 +1,6 @@
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
+import org.optaplanner.core.api.domain.solution.PlanningEntityProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
@@ -14,8 +15,9 @@ public class Traveler {
     int time;
     @PlanningVariable(valueRangeProviderRefs = "nextPoss")
     Connection c;
-
     Timetable t;
+
+
     private int totalTravelTime = -1;
 
     protected int getDestination() {
@@ -24,43 +26,14 @@ public class Traveler {
 
 
     @PlanningEntityCollectionProperty
-    private ArrayList<Connection> journey;
+    private ArrayList<Journey> journey;
 
 
     Traveler(int startPosId) {
-        journey=new ArrayList<Connection>();
-        t=new Timetable();
-        fromPlaceId=startPosId;
+        journey = new ArrayList<Journey>();
+        t = new Timetable();
+        fromPlaceId = startPosId;
 
-    }
-
-    public boolean check() {
-        int currentPlace = fromPlaceId;
-        int currentTime = 0;
-        int i=0;
-        System.out.println("Deb checking possible journey");
-        for (Connection legU : journey
-        ) {
-            //Connection legU=journey;
-            i++;
-            System.out.println("Deb chk "+i+".."+journey);
-
-
-            if (legU.startPlaceId != currentPlace) {
-                return false;
-            }
-            if (getDestination() == currentPlace) {
-                return true;
-            }
-            if (legU.from < currentTime) {
-                return false;
-            }
-            currentTime = legU.from + legU.duration;
-            currentPlace = legU.destinationPlaceId;
-        }
-
-        totalTravelTime = currentTime;
-        return currentPlace == getDestination();
     }
 
     public int getTotalTravelTime() {
@@ -74,55 +47,44 @@ public class Traveler {
 
     }
 
-    public String getJourneyDescription() {
-        String res="";
-        for (Connection currentConnection: journey
-             ) {
 
-            res+=currentConnection.toString()+"\n";
+    public boolean check() {
+        for (Journey j : journey
+        ) {
+            if (j.check()) {
+                return true;
+            }
         }
-        return res;
+        return false;
     }
 
 
-    @ValueRangeProvider(id = "stationRange")
-    public List<Connection> getNextPossibleCollection() {
-        int start=fromPlaceId;
-        int time=0;
-        if (journey.size()>0) {
-
-
-            Connection lastConn=journey.get(journey.size());
-            start=lastConn.destinationPlaceId;
-            time=journey.get(journey.size()).from+journey.get(journey.size()).duration;
+    public String getJourneyDescription() {
+        String res = "";
+        for (Journey j : journey
+        ) {
+            res = res + j.getJourneyDescription() + "\nor\n";
         }
+        return res;
 
-        return t.getFutureConnectionsFrom(start, time);
     }
 
     public void createResourcesToOptimize() {
         //journey=new ArrayList<UsedConnection>();
         //  journey=new Connection();
-        int start=fromPlaceId;
-        int time=0;
-        if (journey.size()>0) {
+        int start = fromPlaceId;
+        int time = 0;
 
-
-            Connection lastConn=journey.get(journey.size());
-            start=lastConn.destinationPlaceId;
-            time=journey.get(journey.size()).from+journey.get(journey.size()).duration;
+        for (int i = 0; i < 10000; i++) {
+            Journey j = new Journey(fromPlaceId, getDestination());
+            journey.add(j.getRandomJourney());
         }
-
-        List<Connection> possible=t.getFutureConnectionsFrom(time, start);
-        Random rand = new Random();
-        Connection randomElement = (Connection) possible.get(rand.nextInt(possible.size()));
-        journey.add(randomElement);
 
     }
 
     @ValueRangeProvider(id="nextPoss")
     public List<Connection> possibleNext(){
-        Timetable t=new Timetable();
         return t.getConnections();
     }
+
 }
