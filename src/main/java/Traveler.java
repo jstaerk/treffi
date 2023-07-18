@@ -28,6 +28,9 @@ public class Traveler {
     @PlanningEntityCollectionProperty
     private ArrayList<Journey> journey;
 
+    private Journey bestJourney;
+
+
 
     Traveler(int startPosId) {
         journey = new ArrayList<Journey>();
@@ -49,25 +52,25 @@ public class Traveler {
 
 
     public boolean check() {
+        totalTravelTime=Integer.MAX_VALUE;
+        boolean chk=false;
         for (Journey j : journey
         ) {
             if (j.check()) {
-                totalTravelTime=j.getTotalTravelTime();
-                return true;
+                chk=true;
+                if (j.getTotalTravelTime()<totalTravelTime) {
+                    totalTravelTime=j.getTotalTravelTime();
+                    bestJourney=j;
+                }
+
             }
         }
-        return false;
+        return chk;
     }
 
 
     public String getJourneyDescription() {
-        String res = "";
-        for (Journey j : journey
-        ) {
-            res = res + j.getJourneyDescription() + "\nor\n";
-        }
-        return res;
-
+        return bestJourney.getJourneyDescription();
     }
 
     public void createResourcesToOptimize() {
