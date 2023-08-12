@@ -1,4 +1,6 @@
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Journey {
     Timetable t;
     int totalTravelTime = -1;
 
+    private static Logger logger = LoggerFactory.getLogger(Journey.class);
 
     public Journey(int startPlaceId, int destinationPlaceId) {
         this.startPlaceId = startPlaceId;
@@ -75,12 +78,13 @@ public class Journey {
         int currentPlace = startPlaceId;
         int currentTime = 0;
         int i = 0;
-        System.out.println("Deb checking possible journey");
+        logger.debug("checking possible journey");
         for (Connection legU : journey
         ) {
             //Connection legU=journey;
             i++;
-            System.out.println("Deb chk " + i + ".." + journey);
+
+            logger.debug("  checking " + i + ".." + journey);
 
 
             if (legU.startPlaceId != currentPlace) {

@@ -3,12 +3,11 @@ plugins {
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+version '0.5-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
-
 dependencies {//9.38.0.Final
     implementation group: 'org.optaplanner', name: 'optaplanner-core', version: '9.38.0.Final'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.7'
@@ -17,4 +16,14 @@ dependencies {//9.38.0.Final
 }
 test {
     useJUnitPlatform()
+}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
 }
